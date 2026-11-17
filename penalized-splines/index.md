@@ -10,9 +10,59 @@ Each predictor has its own cubic spline. The package estimates how strongly each
 
 ## Marginal effects: unpenalized and penalized splines
 
-This example fits simulated continuous EEG from **200 events**, using **8 basis functions per predictor**. Both panels show predictions from the same data and model structure.
+### Load the example data
 
-Each colored curve is the predicted EEG response at one value of **x₁**, from −2 to 2, while **x₂ is held at 0**. The colors identify predictor values; the curves are complete predicted responses, rather than individual spline basis functions.
+Run this example from the root of the [package repository](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl), with CairoMakie and UnfoldMakie available in your Julia environment. It uses the saved simulated EEG recording and its table of **200 events**.
+
+```julia
+using Unfold, UnfoldPenalizedSplines, DataFrames, DelimitedFiles
+using CairoMakie, UnfoldMakie
+
+folder = joinpath("results", "erp_effects")
+event_rows, _ = readdlm(joinpath(folder, "events.csv"), ',', Float64; header=true)
+recording, _ = readdlm(joinpath(folder, "recording.csv"), ',', Float64; header=true)
+events = DataFrame(x1=event_rows[:, 1], x2=event_rows[:, 2],
+                   latency=Int.(event_rows[:, 3]))
+data = reshape(recording[:, 3], 1, :)  # one EEG channel
+```
+
+### Fit both models
+
+Both fits use the same formula and **8 basis functions per predictor**. The first fits the spline coefficients without a penalty. The second estimates one smoothing strength per predictor using REML.
+
+```julia
+formula = @formula(0 ~ 1 + pspl(x1, 8) + pspl(x2, 8))
+basis = firbasis(τ=(-0.1, 0.5), sfreq=100; interpolate=false)
+
+unpenalized = fit(UnfoldModel, formula, events, data, basis;
+                  solver=(X, y) -> Unfold.solver_default(X.X, y))
+penalized = fit(UnfoldModel, formula, events, data, basis)
+```
+
+### Predict and plot
+
+`effects()` predicts the EEG response over time at each of 21 values of **x₁**, holding **x₂ at 0**. Each color corresponds to one value of x₁.
+
+```julia
+grid = Dict(:x1 => collect(range(-2, 2; length=21)), :x2 => [0.0])
+left = effects(grid, unpenalized)
+right = effects(grid, penalized)
+
+fig = Figure(size=(900, 390))
+mapping = (; x=:time, y=:yhat, color=:x1, group=:x1 => nonnumeric)
+for (panel, curves, title) in [(1, left, "Unpenalized spline model"),
+                               (2, right, "Penalized spline model")]
+    plot_erp!(fig[1, panel], curves; mapping,
+        layout=(; show_legend=false), visual=(; colormap=:roma),
+        axis=(; title, xlabel="Time [s]", ylabel="Voltage [µV]",
+                xticks=[0.0, 0.2, 0.4], yticks=[-3.0, 0.0, 3.0, 6.0, 9.0],
+                limits=(-0.1, 0.5, -6.5, 10.5)))
+end
+Colorbar(fig[1, 3]; colormap=:roma, limits=(-2, 2), ticks=[-2, 0, 2],
+         width=12, topspinecolor=:transparent, ticksvisible=false)
+Label(fig[1, 3, Top()], "x₁")
+fig
+```
 
 ```@raw html
 <figure style="margin: 1.5rem 0;">
