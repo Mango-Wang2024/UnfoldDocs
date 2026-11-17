@@ -10,9 +10,12 @@ Each predictor has its own cubic spline. The package estimates how strongly each
 
 ## Marginal effects: unpenalized and penalized splines
 
-### Load the example data
+We use a simulated EEG recording with **200 events**. Run the example from the root of the [package repository](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl).
 
-Run this example from the root of the [package repository](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl), with CairoMakie and UnfoldMakie available in your Julia environment. It uses the saved simulated EEG recording and its table of **200 events**.
+```@raw html
+<details>
+<summary>Load packages and example data</summary>
+```
 
 ```julia
 using Unfold, UnfoldPenalizedSplines, DataFrames, DelimitedFiles
@@ -26,9 +29,11 @@ events = DataFrame(x1=event_rows[:, 1], x2=event_rows[:, 2],
 data = reshape(recording[:, 3], 1, :)  # one EEG channel
 ```
 
-### Fit both models
+```@raw html
+</details>
+```
 
-Both fits use the same formula and **8 basis functions per predictor**. The first fits the spline coefficients without a penalty. The second estimates one smoothing strength per predictor using REML.
+Fit the same spline model twice, first without a penalty and then with REML smoothing.
 
 ```julia
 formula = @formula(0 ~ 1 + pspl(x1, 8) + pspl(x2, 8))
@@ -39,29 +44,14 @@ unpenalized = fit(UnfoldModel, formula, events, data, basis;
 penalized = fit(UnfoldModel, formula, events, data, basis)
 ```
 
-### Predict and plot
-
-`effects()` predicts the EEG response over time at each of 21 values of **x₁**, holding **x₂ at 0**. Each color corresponds to one value of x₁.
+Use `effects()` to predict the EEG response at 21 values of **x₁**, with **x₂ held at 0**, and plot one panel per fit.
 
 ```julia
-grid = Dict(:x1 => collect(range(-2, 2; length=21)), :x2 => [0.0])
-left = effects(grid, unpenalized)
-right = effects(grid, penalized)
+grid = Dict(:x1 => -2:0.2:2, :x2 => [0.0])
+curves = vcat(effects(grid, unpenalized), effects(grid, penalized);
+              source=:model => ["(a) Unpenalized spline model", "(b) Penalized spline model"])
 
-fig = Figure(size=(900, 390))
-mapping = (; x=:time, y=:yhat, color=:x1, group=:x1 => nonnumeric)
-for (panel, curves, title) in [(1, left, "Unpenalized spline model"),
-                               (2, right, "Penalized spline model")]
-    plot_erp!(fig[1, panel], curves; mapping,
-        layout=(; show_legend=false), visual=(; colormap=:roma),
-        axis=(; title, xlabel="Time [s]", ylabel="Voltage [µV]",
-                xticks=[0.0, 0.2, 0.4], yticks=[-3.0, 0.0, 3.0, 6.0, 9.0],
-                limits=(-0.1, 0.5, -6.5, 10.5)))
-end
-Colorbar(fig[1, 3]; colormap=:roma, limits=(-2, 2), ticks=[-2, 0, 2],
-         width=12, topspinecolor=:transparent, ticksvisible=false)
-Label(fig[1, 3, Top()], "x₁")
-fig
+plot_erp(curves; mapping=(; color=:x1, group=:x1 => nonnumeric, col=:model))
 ```
 
 ```@raw html
