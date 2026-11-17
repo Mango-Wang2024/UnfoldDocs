@@ -16,7 +16,7 @@ Each colored curve is the predicted EEG response at one value of **x₁**, from 
 
 ```@raw html
 <figure style="margin: 1.5rem 0;">
-  <img src="assets/erp-effects.svg" alt="Marginal EEG responses for x1: unpenalized fitting on the left and REML-smoothed fitting on the right, with x2 held at zero." style="display: block; width: 100%; height: auto;">
+  <img src="assets/erp-effects.svg?v=aeb9b24" alt="Marginal EEG responses for x1: unpenalized fitting on the left and REML-smoothed fitting on the right, with x2 held at zero." style="display: block; width: 100%; height: auto;">
 </figure>
 ```
 
