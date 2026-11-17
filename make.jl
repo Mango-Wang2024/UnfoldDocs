@@ -37,6 +37,18 @@ Documenter.makedocs(
         ],]
 )
 
+
+# Build a standalone introduction for the new navigation section.
+penalized_splines_build = joinpath(@__DIR__, "build-penalized-splines")
+Documenter.makedocs(
+    sitename="UnfoldPenalizedSplines.jl",
+    source=joinpath(@__DIR__, "penalized-splines"),
+    build=penalized_splines_build,
+    modules=Module[],
+    format=Documenter.HTML(; inventory_version="1.0.0"),
+    pages=["Introduction" => "index.md"],
+)
+
 #---
 
 docs = [
@@ -44,6 +56,12 @@ docs = [
         upstream=joinpath(@__DIR__, "build"),
         path="main",
         name=MultiDocumenter.@htl("<div class=\"homebutton\">Home</div>"),
+        fix_canonical_url=false,
+    ),
+    MultiDocumenter.MultiDocRef(
+        upstream=penalized_splines_build,
+        path="UnfoldPenalizedSplines.jl",
+        name=generate_name("Penalized splines", "PenalizedSplines", "#A970DD"),
         fix_canonical_url=false,
     ),
     MultiDocumenter.MultiDocRef(
