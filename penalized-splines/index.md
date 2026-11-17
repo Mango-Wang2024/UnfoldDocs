@@ -16,7 +16,7 @@ Each colored curve is the predicted EEG response at one value of **x₁**, from 
 
 ```@raw html
 <figure style="margin: 1.5rem 0;">
-  <img src="assets/erp-effects.png" alt="Marginal EEG responses for x1: unpenalized fitting on the left and REML-smoothed fitting on the right, with x2 held at zero." style="display: block; width: 100%; height: auto;">
+  <img src="assets/erp-effects.svg" alt="Marginal EEG responses for x1: unpenalized fitting on the left and REML-smoothed fitting on the right, with x2 held at zero." style="display: block; width: 100%; height: auto;">
 </figure>
 ```
 
@@ -25,7 +25,7 @@ Each colored curve is the predicted EEG response at one value of **x₁**, from 
 
 The penalty controls bending **across predictor values**. It does not impose a separate smoothness penalty along time. Although only x₁ varies in this plot, both predictors were used during fitting.
 
-[Example code](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/examples/erp_effects.jl) · [Plot code](assets/plot-erp-effects.R) · [Results and data](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/results/erp_effects/RESULTS.md)
+[Example code](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/examples/erp_effects.jl) · [Plot code](assets/plot-erp-effects.jl) · [Results and data](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/results/erp_effects/RESULTS.md)
 
 ## Adjust spline smoothing
 
