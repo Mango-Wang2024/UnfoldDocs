@@ -8,14 +8,13 @@ values, _ = readdlm(ARGS[1], ',', Any; header=true)
 curves = UnfoldMakie.DataFrame(time=Float64.(values[:,3]), x1=Float64.(values[:,4]),
                               yhat=Float64.(values[:,6]), method=String.(values[:,7]))
 
-# The reference is 600 units wide. Scale all typography and strokes together
-# so both images have identical lettering and axis widths at the same page width.
+# Keep the reference axis thickness and use slightly smaller text.
 figure_size = (900, 390)
 scale = figure_size[1] / 600
-font_size = 14scale
+font_size = 13scale
 figure = Figure(size=figure_size, fontsize=font_size, figure_padding=16scale,
                 fonts=(; regular="TeX Gyre Heros Makie"))
-titles = ["(a) Unpenalized spline model", "(b) Penalized spline model (REML)"]
+titles = ["(a) Unpenalized spline model", "(b) Penalized spline model"]
 for (panel, method) in enumerate(["Unpenalized", "REML"])
     table = curves[curves.method .== method, :]
     plot_erp!(figure[1,panel], table;
@@ -45,5 +44,5 @@ Label(figure[1,3,Top()], "x₁"; fontsize=font_size, font=:regular,
 colgap!(figure.layout, 18scale)
 save(ARGS[2], figure; px_per_unit=2)
 save(replace(ARGS[2], r"\.png$" => ".svg"), figure)
-println("Reference font: TeX Gyre Heros Makie, regular, 14 units per 600-unit image width")
+println("Font: TeX Gyre Heros Makie, regular, 13 units per 600-unit image width")
 println("Reference spine/tick width: 1 unit per 600-unit image width")
