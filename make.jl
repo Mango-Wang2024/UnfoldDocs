@@ -99,7 +99,7 @@ docs = [
     MultiDocumenter.MultiDocRef(
         upstream=penalized_splines_build,
         path="UnfoldPenalizedSplines.jl",
-        name=generate_name("Penalized splines", "PenalizedSplines", "#A970DD"),
+        name=generate_name("Smoothing", "PenalizedSplines", "#A970DD"),
         fix_canonical_url=false,
     ),
     MultiDocumenter.DropdownNav("Related Tools", [
