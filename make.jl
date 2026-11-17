@@ -59,12 +59,6 @@ docs = [
         fix_canonical_url=false,
     ),
     MultiDocumenter.MultiDocRef(
-        upstream=penalized_splines_build,
-        path="UnfoldPenalizedSplines.jl",
-        name=generate_name("Penalized splines", "PenalizedSplines", "#A970DD"),
-        fix_canonical_url=false,
-    ),
-    MultiDocumenter.MultiDocRef(
         upstream=joinpath(clonedir, "Unfold.jl"),
         path="Unfold.jl",
         name=generate_name("Analysis", "", "#ccc"),
@@ -102,6 +96,12 @@ docs = [
         path="UnfoldDecode.jl",
         name=generate_name("Decoding", "Decode", "#009BA4"),#MultiDocumenter.@htl("<div class=\"headertitle\">Decoding </div><br> UnfoldDecode.jl"),
         giturl="https://github.com/unfoldtoolbox/UnfoldDecode.jl.git",),
+    MultiDocumenter.MultiDocRef(
+        upstream=penalized_splines_build,
+        path="UnfoldPenalizedSplines.jl",
+        name=generate_name("Penalized splines", "PenalizedSplines", "#A970DD"),
+        fix_canonical_url=false,
+    ),
     MultiDocumenter.DropdownNav("Related Tools", [
         MultiDocumenter.MultiDocRef(
             upstream=joinpath(clonedir, "ClusterDepth.jl"),
