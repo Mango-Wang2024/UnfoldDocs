@@ -1,32 +1,42 @@
-name: MultiDocumenter Deploy
+name: Preview website
+
 on:
   push:
-    branches:
-      - main
-  repository_dispatch:
-    types: [individual-docs-updated]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  aggregate:
+  publish:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: julia-actions/setup-julia@v1
+      - uses: actions/checkout@v6
+
+      - uses: julia-actions/setup-julia@v3
         with:
           version: '1.11'
-      - uses: actions/cache@v4
-        env:
-          cache-name: cache-artifacts
+
+      - uses: actions/configure-pages@v5
+
+      - name: Install required packages
+        run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
+
+      - name: Build the website
+        run: julia --project=. make.jl
+
+      - uses: actions/upload-pages-artifact@v4
         with:
-          path: ~/.julia/artifacts
-          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/Project.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-test-${{ env.cache-name }}-
-            ${{ runner.os }}-test-
-            ${{ runner.os }}-
-      - name: Install dependencies
-        run: julia --project=./ -e 'using Pkg; Pkg.instantiate()'
-      - name: Aggregate and deploy
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          julia --project=./ make.jl deploy
+          path: out
+
+      - name: Publish the website
+        id: deployment
+        uses: actions/deploy-pages@v4
+        
