@@ -39,7 +39,7 @@ Use the selector to compare four settings:
 Each slider position shows a refitted model with the chosen λ values, keeping the same data and basis size. Larger λ means stronger smoothing across that predictor's values. The first panel varies x₁ with x₂ = 0; the second varies x₂ with x₁ = 0.
 
 ```@raw html
-<iframe id="spline-smoothing-demo" src="assets/smoothing-demo.htm" title="Adjust the smoothing strengths of the x1 and x2 splines" loading="lazy" style="display: block; width: 100%; height: 720px; border: 0;"></iframe>
+<iframe id="spline-smoothing-demo" src="assets/smoothing-demo.htm" title="Adjust the smoothing strengths of the x1 and x2 splines" loading="lazy" style="display: block; width: 100%; height: 720px; border: 0; background: white; color-scheme: only light;"></iframe>
 <script src="assets/embed-demo.js"></script>
 ```
 
