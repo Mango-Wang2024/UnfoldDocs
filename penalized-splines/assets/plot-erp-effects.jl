@@ -36,9 +36,9 @@ for (panel, method) in enumerate(["Unpenalized", "REML"])
                 xticks=[0.0,0.2,0.4], yticks=Float64.([-3,0,3,6,9]),
                 limits=(-0.1,0.5,-6.5,10.5)))
 end
-Colorbar(figure[1,3]; colormap=:roma, limits=(-2,2), width=12scale,
+Colorbar(figure[1,3]; colormap=:roma, limits=(-2,2), width=12,
          ticklabelsize=font_size, ticklabelfont=:regular,
-         spinewidth=scale, tickwidth=scale, ticksize=5scale, ticks=[-2,0,2])
+         topspinecolor=:transparent, ticksvisible=false, ticklabelpad=7.5, ticks=[-2,0,2])
 Label(figure[1,3,Top()], "x₁"; fontsize=font_size, font=:regular,
       padding=(0,0,4scale,0))
 colgap!(figure.layout, 18scale)
