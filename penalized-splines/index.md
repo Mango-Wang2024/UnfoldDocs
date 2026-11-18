@@ -17,6 +17,15 @@ We use a simulated EEG recording with **200 events**. Run the example from the r
 <summary>Load packages and example data</summary>
 ```
 
+Install the fitting and plotting dependencies once from the package repository root.
+
+```sh
+julia --project=. -e 'using Pkg; Pkg.instantiate()'
+julia --project=assets -e 'using Pkg; Pkg.instantiate()'
+```
+
+Start Julia with `julia --project=.` and run the Julia blocks in order.
+
 ```julia
 using Unfold, UnfoldPenalizedSplines, DataFrames, DelimitedFiles
 
@@ -51,10 +60,18 @@ effects_unpenalized = effects(grid, unpenalized)
 effects_penalized = effects(grid, penalized)
 ```
 
-To generate the figure below, save [curves.csv](https://raw.githubusercontent.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/main/results/erp_effects/curves.csv) alongside [plot-erp-effects.jl](assets/plot-erp-effects.jl). Run this command in that folder with Makie, CairoMakie, and UnfoldMakie installed. The script uses the saved predictions and writes both `erp-effects.png` and the `erp-effects.svg` displayed here.
+Pass those predictions to the Makie script included in the package repository. It writes `erp-effects.png` and `erp-effects.svg` to your current folder.
 
-```sh
-julia plot-erp-effects.jl curves.csv erp-effects.png
+```julia
+curves = vcat(effects_unpenalized, effects_penalized;
+              source=:method => ["Unpenalized", "REML"])
+columns = [:channel, :eventname, :time, :x1, :x2, :yhat, :method]
+mktemp() do path, io
+    writedlm(io, permutedims(string.(columns)), ',')
+    writedlm(io, Matrix(curves[:, columns]), ',')
+    close(io)
+    run(`$(Base.julia_cmd()) --project=assets assets/plot_erp_effects.jl $path erp-effects.png`)
+end
 ```
 
 ```@raw html
@@ -68,7 +85,7 @@ julia plot-erp-effects.jl curves.csv erp-effects.png
 
 The penalty controls bending **across predictor values**. It does not impose a separate smoothness penalty along time. Although only x₁ varies in this plot, both predictors were used during fitting.
 
-[Example code](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/examples/erp_effects.jl) · [Plot code](assets/plot-erp-effects.jl) · [Results and data](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/results/erp_effects/RESULTS.md)
+[Example code](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/examples/erp_effects.jl) · [Plot code](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/assets/plot_erp_effects.jl) · [Results and data](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/results/erp_effects/RESULTS.md)
 
 ## Adjust spline smoothing
 
