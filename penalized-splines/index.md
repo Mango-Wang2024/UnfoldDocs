@@ -76,7 +76,7 @@ end
 
 ```@raw html
 <figure style="margin: 1.5rem 0;">
-  <img src="assets/erp-effects.svg?v=unfoldsim" alt="Marginal EEG responses for x1: unpenalized fitting on the left and REML-smoothed fitting on the right, with x2 held at zero." style="display: block; width: 100%; height: auto;">
+  <img src="assets/erp-effects.svg?v=demo-style" alt="Marginal EEG responses for x1: unpenalized fitting on the left and REML-smoothed fitting on the right, with x2 held at zero." style="display: block; width: 100%; height: auto;">
 </figure>
 ```
 
