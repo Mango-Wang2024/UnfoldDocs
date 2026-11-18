@@ -19,7 +19,6 @@ We use a simulated EEG recording with **200 events**. Run the example from the r
 
 ```julia
 using Unfold, UnfoldPenalizedSplines, DataFrames, DelimitedFiles
-using CairoMakie, UnfoldMakie
 
 folder = joinpath("results", "erp_effects")
 event_rows, _ = readdlm(joinpath(folder, "events.csv"), ',', Float64; header=true)
@@ -44,14 +43,18 @@ unpenalized = fit(UnfoldModel, formula, events, data, basis;
 penalized = fit(UnfoldModel, formula, events, data, basis)
 ```
 
-Use `effects()` to predict the EEG response at 21 values of **x₁**, with **x₂ held at 0**, and plot one panel per fit.
+Use `effects()` to predict the EEG response at 21 values of **x₁**, with **x₂ held at 0**.
 
 ```julia
-grid = Dict(:x1 => -2:0.2:2, :x2 => [0.0])
-curves = vcat(effects(grid, unpenalized), effects(grid, penalized);
-              source=:model => ["(a) Unpenalized spline model", "(b) Penalized spline model"])
+grid = Dict(:x1 => collect(range(-2, 2; length=21)), :x2 => [0.0])
+effects_unpenalized = effects(grid, unpenalized)
+effects_penalized = effects(grid, penalized)
+```
 
-plot_erp(curves; mapping=(; color=:x1, group=:x1 => nonnumeric, col=:model))
+To generate the figure below, save [curves.csv](https://raw.githubusercontent.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/main/results/erp_effects/curves.csv) alongside [plot-erp-effects.jl](assets/plot-erp-effects.jl). Run this command in that folder with Makie, CairoMakie, and UnfoldMakie installed. The script uses the saved predictions and writes both `erp-effects.png` and the `erp-effects.svg` displayed here.
+
+```sh
+julia plot-erp-effects.jl curves.csv erp-effects.png
 ```
 
 ```@raw html
@@ -76,7 +79,13 @@ Use the selector to compare four settings:
 - **x₂:** adjust λ₂; λ₁ stays fixed at its REML estimate, 0.7233.
 - **Both predictors:** adjust both smoothing strengths.
 
-Each slider position shows a refitted model with the chosen λ values, keeping the same data and basis size. Larger λ means stronger smoothing across that predictor's values. The first panel varies x₁ with x₂ = 0; the second varies x₂ with x₁ = 0. The demo switches between figures rendered in advance with [CairoMakie](assets/plot-smoothing-demo.jl).
+Each slider position shows a refitted model with the chosen λ values, keeping the same data and basis size. Larger λ means stronger smoothing across that predictor's values. The first panel varies x₁ with x₂ = 0; the second varies x₂ with x₁ = 0.
+
+To generate the plots used by the demo, save [smoothing-fits.json](assets/smoothing-fits.json) alongside [plot-smoothing-demo.jl](assets/plot-smoothing-demo.jl). Run this command in that folder with Makie, CairoMakie, and JSON installed in Julia and `cwebp` on your PATH. The script renders the two plots for each slider setting into `smoothing-plots/`.
+
+```sh
+julia plot-smoothing-demo.jl
+```
 
 ```@raw html
 <iframe id="spline-smoothing-demo" src="assets/smoothing-demo.htm?v=makie" title="Adjust the smoothing strengths of the x1 and x2 splines" loading="lazy" style="display: block; width: 100%; height: 720px; border: 0; background: white; color-scheme: only light;"></iframe>
