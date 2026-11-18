@@ -103,7 +103,7 @@ Each slider position shows a refitted model with the chosen λ values, keeping t
 <script src="assets/embed-demo.js"></script>
 ```
 
-Demo source on GitHub · [Refitting](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/examples/smoothing_fits.jl) · [Makie plots](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/assets/plot_smoothing_demo.jl) · [Slider controls](https://github.com/Mango-Wang2024/UnfoldDocs/blob/main/penalized-splines/assets/smoothing-demo.htm)
+Demo source on GitHub · [Demo fitting](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/assets/fit_smoothing_demo.jl) · [Makie plots](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/assets/plot_smoothing_demo.jl) · [Slider controls](https://github.com/Mango-Wang2024/UnfoldDocs/blob/main/penalized-splines/assets/smoothing-demo.htm)
 
 ## Tutorial outline
 
