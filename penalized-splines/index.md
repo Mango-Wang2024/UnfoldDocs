@@ -10,7 +10,7 @@ Each predictor has its own cubic spline. The package estimates how strongly each
 
 ## Marginal effects: unpenalized and penalized splines
 
-We use a simulated EEG recording with **200 events**. Run the example from the root of the [package repository](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl).
+UnfoldSim generates the EEG recording from our **200 predictor pairs**. The predictors set the height of the P300 peak through our sine and cosine effects. The comparison and the demo use the same recording. Run the code from the root of the [package repository](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl).
 
 ```@raw html
 <details>
@@ -76,12 +76,12 @@ end
 
 ```@raw html
 <figure style="margin: 1.5rem 0;">
-  <img src="assets/erp-effects.svg?v=aeb9b24" alt="Marginal EEG responses for x1: unpenalized fitting on the left and REML-smoothed fitting on the right, with x2 held at zero." style="display: block; width: 100%; height: auto;">
+  <img src="assets/erp-effects.svg?v=unfoldsim" alt="Marginal EEG responses for x1: unpenalized fitting on the left and REML-smoothed fitting on the right, with x2 held at zero." style="display: block; width: 100%; height: auto;">
 </figure>
 ```
 
 - **Left — unpenalized:** both smoothing strengths are zero, so the spline coefficients receive no bending penalty.
-- **Right — penalized:** REML estimates one smoothing strength per predictor: **λ₁ ≈ 0.7233** and **λ₂ ≈ 93.34**. The basis size remains fixed at 8.
+- **Right — penalized:** REML estimates one smoothing strength per predictor: **λ₁ ≈ 0.6430** and **λ₂ ≈ 69.82**. The basis size remains fixed at 8.
 
 The penalty controls bending **across predictor values**. It does not impose a separate smoothness penalty along time. Although only x₁ varies in this plot, both predictors were used during fitting.
 
@@ -92,14 +92,14 @@ The penalty controls bending **across predictor values**. It does not impose a s
 Use the selector to compare four settings:
 
 - **Unpenalized:** both λ values are zero and both sliders are locked.
-- **x₁:** adjust λ₁; λ₂ stays fixed at its REML estimate, 93.34.
-- **x₂:** adjust λ₂; λ₁ stays fixed at its REML estimate, 0.7233.
+- **x₁:** adjust λ₁; λ₂ stays fixed at its REML estimate, 69.82.
+- **x₂:** adjust λ₂; λ₁ stays fixed at its REML estimate, 0.6430.
 - **Both predictors:** adjust both smoothing strengths.
 
 Each slider position shows a refitted model with the chosen λ values, keeping the same data and basis size. Larger λ means stronger smoothing across that predictor's values. The first panel varies x₁ with x₂ = 0; the second varies x₂ with x₁ = 0.
 
 ```@raw html
-<iframe id="spline-smoothing-demo" src="assets/smoothing-demo.htm?v=makie" title="Adjust the smoothing strengths of the x1 and x2 splines" loading="lazy" style="display: block; width: 100%; height: 720px; border: 0; background: white; color-scheme: only light;"></iframe>
+<iframe id="spline-smoothing-demo" src="assets/smoothing-demo.htm?v=unfoldsim" title="Adjust the smoothing strengths of the x1 and x2 splines" loading="lazy" style="display: block; width: 100%; height: 720px; border: 0; background: white; color-scheme: only light;"></iframe>
 <script src="assets/embed-demo.js"></script>
 ```
 
