@@ -98,11 +98,21 @@ Use the selector to compare four settings:
 
 Each slider position shows a refitted model with the chosen λ values, keeping the same data and basis size. Larger λ means stronger smoothing across that predictor's values. The first panel varies x₁ with x₂ = 0; the second varies x₂ with x₁ = 0.
 
-To generate the plots used by the demo, save [smoothing-fits.json](assets/smoothing-fits.json) alongside [plot-smoothing-demo.jl](assets/plot-smoothing-demo.jl). Run this command in that folder with Makie, CairoMakie, and JSON installed in Julia and `cwebp` on your PATH. The script renders the two plots for each slider setting into `smoothing-plots/`.
+After running the comparison above, continue in the same Julia session. This code reuses the fitted model, refits its coefficients at each slider setting, and renders the plots into `smoothing-plots/`. The renderer uses `cwebp` to save the images.
 
-```sh
-julia plot-smoothing-demo.jl
+```julia
+using Serialization
+include("examples/smoothing_fits.jl")
+
+fits = smoothing_fits(penalized, data)
+mktemp() do path, io
+    serialize(io, fits)
+    close(io)
+    run(`$(Base.julia_cmd()) --project=assets assets/plot_smoothing_demo.jl $path smoothing-plots`)
+end
 ```
+
+[Refitting code](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/examples/smoothing_fits.jl) · [Makie plot code](https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl/blob/main/assets/plot_smoothing_demo.jl)
 
 ```@raw html
 <iframe id="spline-smoothing-demo" src="assets/smoothing-demo.htm?v=makie" title="Adjust the smoothing strengths of the x1 and x2 splines" loading="lazy" style="display: block; width: 100%; height: 720px; border: 0; background: white; color-scheme: only light;"></iframe>
