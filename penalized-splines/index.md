@@ -24,7 +24,7 @@ julia --project=. -e 'using Pkg; Pkg.instantiate()'
 julia --project=assets -e 'using Pkg; Pkg.instantiate()'
 ```
 
-Start Julia with `julia --project=.` and run the Julia blocks in order.
+To try the fitting and prediction steps interactively, start Julia with `julia --project=.` and load the saved recording.
 
 ```julia
 using Unfold, UnfoldPenalizedSplines, DataFrames, DelimitedFiles
@@ -60,18 +60,10 @@ effects_unpenalized = effects(grid, unpenalized)
 effects_penalized = effects(grid, penalized)
 ```
 
-Pass those predictions to the Makie script included in the package repository. It writes `erp-effects.png` and `erp-effects.svg` to your current folder.
+To reproduce the figure below, run the complete example from the package repository root after the setup above. It runs the simulation, fits both models, and saves `assets/erp_effects.png` and `assets/erp_effects.svg`.
 
-```julia
-curves = vcat(effects_unpenalized, effects_penalized;
-              source=:method => ["Unpenalized", "REML"])
-columns = [:channel, :eventname, :time, :x1, :x2, :yhat, :method]
-mktemp() do path, io
-    writedlm(io, permutedims(string.(columns)), ',')
-    writedlm(io, Matrix(curves[:, columns]), ',')
-    close(io)
-    run(`$(Base.julia_cmd()) --project=assets assets/plot_erp_effects.jl $path erp-effects.png`)
-end
+```sh
+julia --project=. examples/erp_effects.jl
 ```
 
 ```@raw html
