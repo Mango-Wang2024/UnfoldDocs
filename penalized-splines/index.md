@@ -76,10 +76,10 @@ Use the selector to compare four settings:
 - **x₂:** adjust λ₂; λ₁ stays fixed at its REML estimate, 0.7233.
 - **Both predictors:** adjust both smoothing strengths.
 
-Each slider position shows a refitted model with the chosen λ values, keeping the same data and basis size. Larger λ means stronger smoothing across that predictor's values. The first panel varies x₁ with x₂ = 0; the second varies x₂ with x₁ = 0.
+Each slider position shows a refitted model with the chosen λ values, keeping the same data and basis size. Larger λ means stronger smoothing across that predictor's values. The first panel varies x₁ with x₂ = 0; the second varies x₂ with x₁ = 0. The demo switches between figures rendered in advance with [CairoMakie](assets/plot-smoothing-demo.jl).
 
 ```@raw html
-<iframe id="spline-smoothing-demo" src="assets/smoothing-demo.htm" title="Adjust the smoothing strengths of the x1 and x2 splines" loading="lazy" style="display: block; width: 100%; height: 720px; border: 0; background: white; color-scheme: only light;"></iframe>
+<iframe id="spline-smoothing-demo" src="assets/smoothing-demo.htm?v=makie" title="Adjust the smoothing strengths of the x1 and x2 splines" loading="lazy" style="display: block; width: 100%; height: 720px; border: 0; background: white; color-scheme: only light;"></iframe>
 <script src="assets/embed-demo.js"></script>
 ```
 
