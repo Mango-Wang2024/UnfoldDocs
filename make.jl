@@ -132,7 +132,7 @@ MultiDocumenter.make(
         index_versions=["stable"],
         engine=MultiDocumenter.FlexSearch
     ),
-    custom_stylesheets=["assets/unfold-docs.css"],
+    custom_stylesheets=["assets/style.css?v=2"],
     hide_previews=true,
     prettyurls=true,
     assets_dir="assets"
