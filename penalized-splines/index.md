@@ -47,9 +47,8 @@ Fit the same spline model twice, first without a penalty and then with REML smoo
 formula = @formula(0 ~ 1 + pspl(x1, 8) + pspl(x2, 8))
 basis = firbasis(τ=(-0.1, 0.5), sfreq=100; interpolate=false)
 
-unpenalized = fit(UnfoldModel, formula, events, data, basis;
-                  solver=(X, y) -> Unfold.solver_default(X.X, y))
-penalized = fit(UnfoldModel, formula, events, data, basis)
+unpenalized = fit(UnfoldModel, formula, events, data, basis)
+penalized = fit_pspl(formula, events, data, basis)
 ```
 
 Use `effects()` to predict the EEG response at 21 values of **x₁**, with **x₂ held at 0**.
