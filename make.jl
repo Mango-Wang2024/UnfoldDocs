@@ -38,19 +38,6 @@ Documenter.makedocs(
 )
 
 
-# Build a standalone introduction for the new navigation section.
-penalized_splines_build = joinpath(@__DIR__, "build-penalized-splines")
-Documenter.makedocs(
-    sitename="UnfoldPenalizedSplines.jl",
-    source=joinpath(@__DIR__, "penalized-splines"),
-    build=penalized_splines_build,
-    modules=Module[],
-    format=Documenter.HTML(; inventory_version="1.0.0"),
-    pages=["Introduction" => "index.md"],
-)
-
-#---
-
 docs = [
     MultiDocumenter.MultiDocRef(
         upstream=joinpath(@__DIR__, "build"),
@@ -97,9 +84,10 @@ docs = [
         name=generate_name("Decoding", "Decode", "#009BA4"),#MultiDocumenter.@htl("<div class=\"headertitle\">Decoding </div><br> UnfoldDecode.jl"),
         giturl="https://github.com/unfoldtoolbox/UnfoldDecode.jl.git",),
     MultiDocumenter.MultiDocRef(
-        upstream=penalized_splines_build,
+        upstream=joinpath(clonedir, "UnfoldPenalizedSplines.jl"),
         path="UnfoldPenalizedSplines.jl",
         name=generate_name("Smoothing", "PenalizedSplines", "#A970DD"),
+        giturl="https://github.com/Mango-Wang2024/UnfoldPenalizedSplines.jl.git",
         fix_canonical_url=false,
     ),
     MultiDocumenter.DropdownNav("Related Tools", [
